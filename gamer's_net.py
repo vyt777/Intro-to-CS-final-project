@@ -355,6 +355,7 @@ def rev_find_path_to_friend(net, user_A, user_B):
     # if users not in net we can't find way between them
     if user_A not in net or user_B not in net:
         return None    
+    #if node we are searching from is explored we are going backward
     if is_explored(net, user_A):
         net[user_A].update({'explored':'explored'})
         return []
