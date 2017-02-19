@@ -1,3 +1,3 @@
 # Intro-to-CS-final-project
 This is the final project of "Intro to Computer Science" course (https://www.udacity.com/course/intro-to-computer-science--cs101).
-This project solves problem of Depth-first search, searching the path from one node of graph to another. It implements recursion and uses different data types such as dictionary, list and string. 
+This project solves problem of Depth-first search, searching the path from one node of graph to another. It implements recursion and uses different data types such as dictionary, list and string. I took theoretic description of search in graph from «Introduction to algorithms» book (by Thomas H. Cormen and colleagues) and implement it in my code. This algorithm uses loop count to prevent infinite loop and also uses a few states of each node (not visited, visited at least once or more, explored).
