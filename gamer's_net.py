@@ -332,6 +332,8 @@ def count_common_connections(net, user_A, user_B):
 #   in this procedure to keep track of nodes already visited in your search. You 
 #   may safely add default parameters since all calls used in the grading script 
 #   will only include the arguments network, user_A, and user_B.
+
+# checking if graph node is explored (that means this node has no branches to node that we looking for)
 def is_explored(net, user):
     num_visited=0
     for name in net[user]['connections']:
@@ -350,22 +352,26 @@ def num_conn_user(net, user):
     return num_names
 
 def rev_find_path_to_friend(net, user_A, user_B):
+    # if users not in net we can't find way between them
     if user_A not in net or user_B not in net:
-        return None
+        return None    
     if is_explored(net, user_A):
         net[user_A].update({'explored':'explored'})
         return []
     net['path']=[]
+    # implementing the loop count to prevent infinite loop
     if 'visited' not in net[user_A]:
         net[user_A].update({'visited':0})
-    net[user_A]['visited']+=1
+    net[user_A]['visited']+=1     
     if net[user_A]['visited']> num_conn_user(net, user_A):
         net[user_A]['visited']=0
         return []
+    # if user at the end of graph is in connections of user we are searching from - we found the way between them
     if user_B in net[user_A]['connections']:
         net['path']+=[user_B]
         net['path']+=[user_A]
         return net['path']
+    # implementing recursive search algorithm
     for name in net[user_A]['connections']:
         net['path']+= rev_find_path_to_friend(net, name, user_B)
         if user_B in net['path']:
@@ -373,6 +379,7 @@ def rev_find_path_to_friend(net, user_A, user_B):
             return net['path']
     return net['path']
 
+# reversing path due to project description requirements
 def find_path_to_friend(net, user_A, user_B):
     path=rev_find_path_to_friend(net, user_A, user_B)
     if path==[] or path==None:
