@@ -48,7 +48,7 @@
 # ----------------------------------------------------------------------------- 
 
 # Example string input. Use it to test your code.
-example_input="John is connected to Bryant, Debra, Walter.\
+example_input = "John is connected to Bryant, Debra, Walter.\
 John likes to play The Movie: The Game, The Legend of Corgi, Dinosaur Diner.\
 Bryant is connected to Olive, Ollie, Freda, Mercedes.\
 Bryant likes to play City Comptroller: The Fiscal Dilemma, Super Mushroom Man.\
@@ -93,9 +93,9 @@ Freda likes to play Starfleet Commander, Ninja Hamsters, Seahorse Adventures."
 # Return:
 #   The newly created network data structure
 def names(example_input):
-    list_of_names=[]
-    example_input =example_input.replace('.', '. ')
-    list_of_input=example_input.split()
+    list_of_names = []
+    example_input = example_input.replace('.', '. ')
+    list_of_input = example_input.split()
     for e in list_of_input:
         if e =='is':
             list_of_names.append(list_of_input[list_of_input.index(e)-1])
@@ -104,43 +104,43 @@ def names(example_input):
 
 
 def nullnet(list_of_names):
-    net={}
+    net = {}
     for e in list_of_names:
-        net[e]={}
+        net[e] = {}
     return net
 
 
 def connections_in_net(example_input, list_of_names, net):
-    last_ind=0
+    last_ind = 0
     for name in list_of_names:
-        name_index=example_input[last_ind:].find(name)+len(name)+last_ind
-        sample= ' is connected to ' 
-        start_ind=example_input[name_index:].find(sample) + len(sample) + name_index
-        last_ind=example_input[start_ind:].find('.')+start_ind
-        connections =example_input[start_ind:last_ind]
+        name_index = example_input[last_ind:].find(name) + len(name) + last_ind
+        sample = ' is connected to ' 
+        start_ind = example_input[name_index:].find(sample) + len(sample) + name_index
+        last_ind = example_input[start_ind:].find('.') + start_ind
+        connections = example_input[start_ind:last_ind]
         connections = connections.split(', ')
-        net[name]['connections']=connections
+        net[name]['connections'] = connections
     return net
 
 
 def games_in_net(example_input, list_of_names, net):
-    last_ind=0
+    last_ind = 0
     for name in list_of_names:
-        name_index=example_input[last_ind:].find(name)+len(name)+last_ind
-        sample=' likes to play '
-        start_ind=example_input[name_index:].find(sample) + len(sample) + name_index
-        last_ind=example_input[start_ind:].find('.')+start_ind
-        games=example_input[start_ind:last_ind]
-        games= games.split(', ')
-        net[name]['games']=games
+        name_index = example_input[last_ind:].find(name) + len(name) + last_ind
+        sample = ' likes to play '
+        start_ind = example_input[name_index:].find(sample) + len(sample) + name_index
+        last_ind = example_input[start_ind:].find('.') + start_ind
+        games = example_input[start_ind:last_ind]
+        games = games.split(', ')
+        net[name]['games'] = games
     return net
 
 
 def create_data_structure(example_input):
-    list_of_names=names(example_input)
-    nulnet_end=nullnet(list_of_names)
-    net_conn=connections_in_net(example_input, list_of_names, nulnet_end)
-    net= games_in_net(example_input, list_of_names, net_conn)
+    list_of_names = names(example_input)
+    nulnet_end = nullnet(list_of_names)
+    net_conn = connections_in_net(example_input, list_of_names, nulnet_end)
+    net = games_in_net(example_input, list_of_names, net_conn)
     return net
 
 # ----------------------------------------------------------------------------- # 
@@ -210,11 +210,11 @@ def add_connection(net, user_A, user_B):
     if user_A in net and user_B in net:
         if 'connections' in net[user_A]:
             if user_B not in net[user_A]['connections']:
-                net[user_A]['connections']+=[user_B]
+                net[user_A]['connections'] += [user_B]
             else:
                 return net
         else:
-            net[user_A]['connections']=[user_B]
+            net[user_A]['connections'] = [user_B]
     else:
         return False
     return net
@@ -263,15 +263,15 @@ def add_new_user(net, user, games):
 #   connection that is a secondary connection as well.
 def clean_list(dirty_list):
     for name in dirty_list:
-        while dirty_list.count(name)>1:
+        while dirty_list.count(name) > 1:
             dirty_list.remove(name)
     return dirty_list
 
 def get_secondary_connections(net, user):
-    secondary_conn=[]
+    secondary_conn = []
     if user in net:
         for name in net[user]['connections']:
-            secondary_conn+=net[name]['connections']
+            secondary_conn += net[name]['connections']
         return clean_list(secondary_conn)
     else:
         return None
@@ -292,11 +292,11 @@ def get_secondary_connections(net, user):
 def count_common_connections(net, user_A, user_B):
     if user_A not in net or user_B not in net:
         return False
-    list_all_conn=net[user_A]['connections']+ net[user_B]['connections']
-    list_occur_conn=[]
+    list_all_conn = net[user_A]['connections'] + net[user_B]['connections']
+    list_occur_conn = []
     for name in list_all_conn:
-        if list_all_conn.count(name)>1:
-            list_occur_conn+=[name]
+        if list_all_conn.count(name) > 1:
+            list_occur_conn += [name]
             list_all_conn.remove(name)
     return len(list_occur_conn)
 
@@ -333,57 +333,81 @@ def count_common_connections(net, user_A, user_B):
 #   may safely add default parameters since all calls used in the grading script 
 #   will only include the arguments network, user_A, and user_B.
 
+
+# if users not in net we can't find way between them
+def users_not_in_net(net, user_A, user_B):
+    if user_A not in net or user_B not in net:
+        return True 
+
 # checking if graph node is explored (that means this node has no branches to node that we looking for)
 def is_explored(net, user):
-    num_visited=0
+    num_visited = 0
     for name in net[user]['connections']:
         if 'visited' in net[name]:
-            num_visited+=1
+            num_visited += 1
+    # if we have visited all nodes connected with user_A than user_A is explored
     if num_visited == len(net[user]['connections']):
         return True
     return False
 
+# counting number of all user's connections
 def num_conn_user(net, user):
-    names_in_conn=[]
+    names_in_conn = []
     for name in net:
         if name is not 'path':
-            names_in_conn+=net[name]['connections']
-    num_names= names_in_conn.count(user)
+            names_in_conn += net[name]['connections']
+    num_names = names_in_conn.count(user)
     return num_names
 
+# implementing the loop count to prevent infinite loop
+def loop_count(net, user_A):
+    if 'visited' not in net[user_A]:
+        net[user_A].update({'visited':0})
+    net[user_A]['visited'] += 1
+    # if number of times we are visited user_A node is bigger than number of connections this user have from other users       
+    if net[user_A]['visited'] > num_conn_user(net, user_A):
+        net[user_A]['visited'] = 0
+        return []
+    else:
+        return net
+
+# if user at the end of graph is in connections of user we are searching from - we found the way between them
+def connection_found(net, user_A, user_B):
+    if user_B in net[user_A]['connections']:
+        return True
+
 def rev_find_path_to_friend(net, user_A, user_B):
-    # if users not in net we can't find way between them
-    if user_A not in net or user_B not in net:
+    if users_not_in_net(net, user_A, user_B):
         return None    
-    #if node we are searching from is explored we are going backward
+
+    # if node we are searching from is explored we go backward and return blank list 
     if is_explored(net, user_A):
         net[user_A].update({'explored':'explored'})
         return []
-    net['path']=[]
-    # implementing the loop count to prevent infinite loop
-    if 'visited' not in net[user_A]:
-        net[user_A].update({'visited':0})
-    net[user_A]['visited']+=1     
-    if net[user_A]['visited']> num_conn_user(net, user_A):
-        net[user_A]['visited']=0
-        return []
-    # if user at the end of graph is in connections of user we are searching from - we found the way between them
-    if user_B in net[user_A]['connections']:
-        net['path']+=[user_B]
-        net['path']+=[user_A]
+
+    # path from user_A to user_B is stored in net (due to project description requirements)
+    net['path'] = []
+
+    if loop_count(net, user_A) == []:
+        return []    
+    
+    if connection_found(net, user_A, user_B):
+        net['path'] += [user_B]
+        net['path'] += [user_A]
         return net['path']
-    # implementing recursive search algorithm
+
+    # implement recursive search algorithm
     for name in net[user_A]['connections']:
-        net['path']+= rev_find_path_to_friend(net, name, user_B)
+        net['path'] += rev_find_path_to_friend(net, name, user_B)
         if user_B in net['path']:
-            net['path']+=[user_A]
+            net['path'] += [user_A]
             return net['path']
     return net['path']
 
-# reversing path due to project description requirements
+# reverse path due to project description requirements
 def find_path_to_friend(net, user_A, user_B):
-    path=rev_find_path_to_friend(net, user_A, user_B)
-    if path==[] or path==None:
+    path = rev_find_path_to_friend(net, user_A, user_B)
+    if path == [] or path == None:
         return None
     return path[::-1]
 
@@ -407,7 +431,7 @@ def number_connections(net, user):
     else:
         return None
 
-net = create_data_structure(example_input)
+#net = create_data_structure(example_input)
 #Testing area
 #print net
 #print get_connections(net, "Debra")
@@ -419,3 +443,18 @@ net = create_data_structure(example_input)
 #print get_secondary_connections(net, "Mercedes")
 #print count_common_connections(net, "Mercedes", "John")
 #print find_path_to_friend(net, "John", "Ollie")
+
+#Example of a net structure full of data:
+#net = {'Freda': {'connections': ['Olive', 'John', 'Debra'], 'games': ['Starfleet Commander', 'Ninja Hamsters', 'Seahorse Adventures']}, 
+#'Ollie': {'connections': ['Mercedes', 'Freda', 'Bryant'], 'games': ['Call of Arms', 'Dwarves and Swords', 'The Movie: The Game']}, 
+#'Debra': {'connections': ['Walter', 'Levi', 'Jennie', 'Robin'], 'games': ['Seven Schemers', 'Pirates in Java Island', 'Dwarves and Swords']},
+#'Olive': {'connections': ['John', 'Ollie'], 'games': ['The Legend of Corgi', 'Starfleet Commander']}, 
+#'Levi': {'connections': ['Ollie', 'John', 'Walter'], 'games': ['The Legend of Corgi', 'Seven Schemers', 'City Comptroller: The Fiscal Dilemma']}, 
+#'Jennie': {'connections': ['Levi', 'John', 'Freda', 'Robin'], 'games': ['Super Mushroom Man', 'Dinosaur Diner', 'Call of Arms']}, 
+#'Mercedes': {'connections': ['Walter', 'Robin', 'Bryant'], 'games': ['The Legend of Corgi', 'Pirates in Java Island', 'Seahorse Adventures']}, 
+#'John': {'connections': ['Bryant', 'Debra', 'Walter'], 'games': ['The Movie: The Game', 'The Legend of Corgi', 'Dinosaur Diner']}, 
+#'Robin': {'connections': ['Ollie'], 'games': ['Call of Arms', 'Dwarves and Swords']}, 
+#'Bryant': {'connections': ['Olive', 'Ollie', 'Freda', 'Mercedes'], 'games': ['City Comptroller: The Fiscal Dilemma', 'Super Mushroom Man']}, 
+#'Walter': {'connections': ['John', 'Levi', 'Bryant'], 'games': ['Seahorse Adventures', 'Ninja Hamsters', 'Super Mushroom Man']}}
+#---
+#So, net is a dict which contains dict (usernames) which contains keys (connections and games) and values (usernames and names of games)
